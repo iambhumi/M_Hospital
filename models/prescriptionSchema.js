@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const prescriptionSchema = new Schema(
   {
     patientId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Number,
       ref: "Patient",
       required: true,
     },
