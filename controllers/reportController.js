@@ -44,12 +44,25 @@ const getClinicalReport = async (req, res) => {
 
 // handle clinical report post request
 const handleClinicalReport = async (req, res) => {
-    const filePath = `http://localhost:3000/uploads/${req.file.filename}`
+     console.log('Uploaded File:', req.file);  //Log the uploaded file
     try{
-        await Clinical.create({
+        console.log('Request Body:', req.body);
+        console.log('Patient ID:', req.body.patientId);
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+         if (!req.body.patientId) {
+            return res.status(400).json({ message: 'Patient ID is required' });
+        }
+        const filePath = `http://localhost:3000/uploads/${req.file.filename}`;
+        console.log('File Path:', filePath);
+       
+        const clinical = await Clinical.create({
             patientId: req.body.patientId,
-            report: filePath
+            imageUrl: filePath
         });
+         console.log('Clinical record created:',clinical);
+         res.status(201).json({clinical});
     } catch (error) {
         res.status(400).json({message: error.message});
     }
@@ -67,12 +80,26 @@ const getPrescription = async (req, res) => {
 
 // handle prescription post request
 const handlePrescription = async (req, res) => {
-    const filePath = `http://localhost:3000/uploads/${req.file.filename}`
+    console.log('Uploaded File:', req.file);  //Log the uploaded file
+    
     try{
-        await Prescription.create({
+         console.log('Request Body:', req.body);
+         console.log('Patient ID:', req.body.patientId);
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+         if (!req.body.patientId) {
+            return res.status(400).json({ message: 'Patient ID is required' });
+        }
+        const filePath = `http://localhost:3000/uploads/${req.file.filename}`;
+        console.log('File Path:', filePath);
+
+        const prescription = await Prescription.create({
             patientId: req.body.patientId,
             imageUrl: filePath
-        });
+             });
+        console.log('Clinical record created:',prescription);
+        res.status(201).json({prescription});
     } catch (error) {
         res.status(400).json({message: error.message});
     }
